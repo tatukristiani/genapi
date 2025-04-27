@@ -1,11 +1,11 @@
 export class Property {
   type: string;
   name: string;
-  nullable: boolean = true;
-  primaryKey: boolean = false;
-  foreignKey: boolean = false;
+  nullable: boolean | string = true;
+  primaryKey: boolean | string = false;
+  foreignKey: boolean | string = false;
   foreignKeyReference: string | null = null;
-  maxLength: number | null = null;
+  maxLength: number | string | null = null;
   decimalIntegerPart: number | null = null;
   decimalFractionPart: number | null = null;
 
@@ -14,13 +14,26 @@ export class Property {
     if (data.name == null) throw new Error("Missing type");
     this.type = data.type;
     this.name = data.name;
-    this.nullable = data.nullable ?? true;
-    this.primaryKey = data.primaryKey ?? false;
-    this.foreignKey = data.foreignKey ?? false;
+    this.nullable =
+      data.nullable == "on" || data.nullable === true ? true : false;
+    this.primaryKey =
+      data.primaryKey == "on" || data.primaryKey === true ? true : false;
+    this.foreignKey =
+      data.foreignKey == "on" || data.foreignKey === true ? true : false;
     this.foreignKeyReference = data.foreignKeyReference ?? null;
-    this.maxLength = data.maxLength ?? null;
-    this.decimalIntegerPart = data.decimalIntegerPart ?? null;
-    this.decimalFractionPart = data.decimalFractionPart ?? null;
+    this.maxLength = Number.isNaN(parseInt(data.maxLength?.toString() ?? ""))
+      ? null
+      : parseInt(data.maxLength?.toString() ?? "");
+    this.decimalIntegerPart = Number.isNaN(
+      parseInt(data.decimalIntegerPart?.toString() ?? "")
+    )
+      ? null
+      : parseInt(data.decimalIntegerPart?.toString() ?? "");
+    this.decimalFractionPart = Number.isNaN(
+      parseInt(data.decimalFractionPart?.toString() ?? "")
+    )
+      ? null
+      : parseInt(data.decimalFractionPart?.toString() ?? "");
   }
   static arrayFromJSON(jsonArray: [] | any): Property[] {
     const properties: Property[] = [];

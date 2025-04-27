@@ -5,7 +5,6 @@ export class Resource {
   properties: Property[];
 
   constructor(data: Partial<Resource>) {
-    console.log("Resource data:", data);
     if (data.name == null) throw new Error("Missing name");
     if (data.properties == null) throw new Error("Missing properties");
     this.name = data.name;

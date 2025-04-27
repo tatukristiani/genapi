@@ -4,10 +4,12 @@ import Resources from "../Resources";
 import CSS from "csstype";
 import { unflatten } from "../../utility/unflatten";
 import { Configurations } from "../../data/Configurations";
+import { useNavigate } from "react-router-dom";
 
 const Generate: any = () => {
   const formRef = useRef(null);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
   const inputDivStyles: CSS.Properties = {
     width: "350px",
   };
@@ -28,15 +30,22 @@ const Generate: any = () => {
       const nested = unflatten(flat);
 
       const conf = Configurations.fromJSON(nested);
-      console.log("Payload:", conf);
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/v1/interfaces",
-          conf
+          "https://localhost:7041/api/v1/interfaces",
+          conf,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
-        const data = await response.data;
-        setMessage(data);
+        if (response.status === 204) {
+          navigate("/apis");
+        } else {
+          setMessage(response.data);
+        }
       } catch (error) {
         setMessage(`Error generating API. Error: ${error}`);
       }
@@ -99,7 +108,11 @@ const Generate: any = () => {
         </div>
         <Resources />
         <div className="text-center mt-5">
-          <input type="submit" value="Generate" className="btn btn-outline-primary"/>
+          <input
+            type="submit"
+            value="Generate"
+            className="btn btn-outline-primary"
+          />
         </div>
       </form>
     </div>

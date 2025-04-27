@@ -8,7 +8,6 @@ export class Configurations {
   resources: Resource[];
 
   constructor(data: Partial<Configurations>) {
-    console.log("Data", data.resources);
     if (data.apiName == null) throw new Error("Missing name");
     if (data.gitHubRepository == null) throw new Error("Missing repository");
     if (data.gitHubUser == null) throw new Error("Missing user");
@@ -23,7 +22,6 @@ export class Configurations {
   }
 
   static fromJSON(json: string | object): Configurations {
-    console.log("");
     const obj = typeof json === "string" ? JSON.parse(json) : json;
     return new Configurations(obj);
   }
