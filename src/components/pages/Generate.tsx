@@ -5,8 +5,24 @@ import CSS from "csstype";
 import { unflatten } from "../../utility/unflatten";
 import { Configurations } from "../../data/Configurations";
 import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+interface IFormInput {
+  apiName: String;
+  gitHubRepoUrl: String;
+  gitHubUsername: String;
+  gitHubPat: String;
+}
 
 const Generate: any = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInput>();
+  const onSubmit: SubmitHandler<IFormInput> = () => {
+    generateApi();
+  };
   const formRef = useRef(null);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -18,9 +34,7 @@ const Generate: any = () => {
     marginBottom: "120px",
   };
 
-  const generateApi = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const generateApi = async () => {
     const formElement = formRef.current;
     if (formElement) {
       const formData = new FormData(formElement);
@@ -56,13 +70,14 @@ const Generate: any = () => {
     <div className="container-fluid" style={divStyles}>
       <h1 className="text-center">Generate API</h1>
       {<p className="text-center text-danger">{message}</p>}
-      <form className="px-5" onSubmit={generateApi} ref={formRef}>
+      <form className="px-5" onSubmit={handleSubmit(onSubmit)} ref={formRef}>
         <div className="mb-5 mt-5 d-flex flex-column align-items-center">
           <div className="mb-3" style={inputDivStyles}>
             <label htmlFor="apiName" className="form-label">
               API Name
             </label>
             <input
+              {...(register("apiName"), { required: true })}
               type="text"
               className="form-control"
               id="apiName"
@@ -75,6 +90,7 @@ const Generate: any = () => {
               Github Repo URL
             </label>
             <input
+              {...(register("gitHubRepoUrl"), { required: true })}
               type="text"
               className="form-control"
               id="gitUrl"
@@ -87,6 +103,7 @@ const Generate: any = () => {
               Github Username
             </label>
             <input
+              {...(register("gitHubUsername"), { required: true })}
               type="text"
               className="form-control"
               id="gitUsername"
@@ -99,6 +116,7 @@ const Generate: any = () => {
               Github PAT
             </label>
             <input
+              {...(register("gitHubPat"), { required: true })}
               type="password"
               className="form-control"
               id="gitPat"
@@ -106,7 +124,7 @@ const Generate: any = () => {
             />
           </div>
         </div>
-        <Resources />
+        <Resources register={register} />
         <div className="text-center mt-5">
           <input
             type="submit"

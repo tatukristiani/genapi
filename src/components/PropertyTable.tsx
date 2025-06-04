@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropertyTableRow from "./PropertyTableRow";
+import { Tooltip } from "react-tooltip";
 
 interface PropertyTableProp {
   parentName: string;
@@ -29,12 +30,53 @@ const PropertyTable: React.FC<PropertyTableProp> = ({
             <th scope="col">Property Name</th>
             <th scope="col">Type</th>
             <th scope="col">Nullable</th>
-            <th scope="col">PK</th>
-            <th scope="col">FK</th>
-            <th scope="col">FK Ref</th>
+            <th
+              scope="col"
+              data-tooltip-id="pkTooltip"
+              data-tooltip-content="Primary Key"
+              data-tooltip-place="top"
+            >
+              PK
+              <Tooltip id="pkTooltip" />
+            </th>
+
+            <th
+              scope="col"
+              data-tooltip-id="fkTooltip"
+              data-tooltip-content="Foreign Key"
+              data-tooltip-place="top"
+            >
+              PK
+              <Tooltip id="fkTooltip" />
+            </th>
+            <th
+              scope="col"
+              data-tooltip-id="fkRefTooltip"
+              data-tooltip-content="Resource name, which this property belongs to"
+              data-tooltip-place="top"
+            >
+              FK ref
+              <Tooltip id="fkRefTooltip" />
+            </th>
             <th scope="col">Max Length</th>
-            <th scope="col">DIP</th>
-            <th scope="col">DFP</th>
+            <th
+              scope="col"
+              data-tooltip-id="dipTooltip"
+              data-tooltip-content="Decimal Integer Part. Count of numbers before decimal pointer."
+              data-tooltip-place="top"
+            >
+              DIP
+              <Tooltip id="dipTooltip" />
+            </th>
+            <th
+              scope="col"
+              data-tooltip-id="dfpTooltip"
+              data-tooltip-content="Decimal Fraction Part. Count of numbers after decimal pointer."
+              data-tooltip-place="top"
+            >
+              DFP
+              <Tooltip id="dfpTooltip" />
+            </th>
           </tr>
         </thead>
         <tbody>
